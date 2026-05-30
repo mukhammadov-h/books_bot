@@ -84,3 +84,16 @@ def get_books():
     books = cursor.fetchall()
 
     return books
+
+def search_book(title):
+    conn = get_connect()
+    cursor = conn.cursor()
+    search_title = f"%{title}%"
+    cursor.execute(
+        '''
+        SELECT title, available_copies FROM books WHERE title LIKE %s;
+        ''',
+        (search_title,)
+    )
+
+    return cursor.fetchall()

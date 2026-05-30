@@ -1,6 +1,6 @@
 from aiogram import Router, types, F
-from aiogram.filters import CommandStart, Command, state
-from database import get_books, check_user, add_user
+from aiogram.filters import CommandStart, Command, CommandObject
+from database import get_books, check_user, add_user, search_book
 router = Router()
 
 
@@ -24,4 +24,10 @@ async def show_books(message: types.Message):
     # books = [f"Kitob nomi: {book}" for book in books]
     await message.answer(f"{'\n'.join(books)}")
 
-# @router.message(Command)
+@router.message(Command('search'))
+async def start(message: types.Message, command: CommandObject):
+    search_query = command.args
+
+    search_books = search_book(search_query)
+
+    await message.answer(f"{search_books}")
